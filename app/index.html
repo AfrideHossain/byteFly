@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/home.css">
+
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <title>ByteFly-On Your Mark, Set, Fly</title>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="nav-left">ByteFly</div>
+        <div class="nav-right">
+            <div class="user-avatar" id="userAvatar">
+                <img src="./style/icons/avatar1.jpg" alt="user">
+            </div>
+        </div>
+    </div>
+
+    <!-- Logged in user info -->
+    <div class="loggedInUserInfoBox" id="profileBox">
+        <i class="bx bx-x" id="closeProfileBox"></i>
+        <h4 id="userID">User ID: 0</h4>
+        <h4 id="userName">John Doe</h4>
+        <h5 id="userEmail">johndoe@mail.com</h5>
+    </div>
+
+    <!-- main container -->
+    <section class="main-body">
+        <div class="main-messaging-box">
+            <div class="chat-info-bar" id="chat-info-bar">
+                <div class="backbtn">
+                    <i class='bx bx-left-arrow-alt'></i>
+                </div>
+                <div class="receiver-avatar">
+                    <img src="./style/icons/avatar1.jpg">
+                </div>
+                <div class="receiver-info">
+                    <p id="receiverS_name">John Doe</p>
+                    <p id="receiverS_conn_status">Active</p>
+                </div>
+            </div>
+            <div class="pair">
+                <!-- Div for other contacts -->
+                <div class="otherPersonsBox" id="otherPersonsBox">
+                    <!-- class name is 'other_user' -->
+
+                    <!-- <div class="other_user">
+                        user 1
+                    </div>
+                    <div class="other_user">
+                        user 5
+                    </div>
+                    <div class="other_user">
+                        user 3
+                    </div>
+                    <div class="other_user">
+                        user 4
+                    </div>
+                    <div class="other_user">
+                        user 5
+                    </div>
+                    <div class="other_user">
+                        user 6
+                    </div>
+                    <div class="other_user">
+                        user 7
+                    </div>
+                    <div class="other_user">
+                        user 8
+                    </div>
+                    <div class="other_user">
+                        user 9
+                    </div> -->
+
+
+
+                </div>
+                <!-- Div for chating -->
+                <div class="chat-box" id="chat-box">
+                    <div class="outgoing-msg">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, nam.
+                    </div>
+
+                    <div class="incoming-msg">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, nam.
+                    </div>
+                    <div class="outgoing-msg">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, nam.
+                    </div>
+
+                    <div class="incoming-msg">
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos dolorem modi in soluta eaque a
+                        quo
+                        odit similique, voluptatibus minima cupiditate voluptatum? Alias, nisi aut similique dolorem
+                        explicabo ullam quae consectetur totam, hic ipsa ex exercitationem magnam tenetur maiores
+                        suscipit.
+                    </div>
+                    <div class="outgoing-msg">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, nam.
+                    </div>
+
+                    <div class="incoming-msg">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, nam.
+                    </div>
+                </div>
+            </div>
+            <div class="send-msg-box" id="send-msg-box">
+                <!-- <input type="text" class="msg-input" id="msg-input" name="msg-input" placeholder="Type your message"> -->
+                <textarea class="input" id="msg-input" name="msg-input" placeholder="Please select an user to chat"
+                    rows="2" readonly></textarea>
+                <button class="submit" id="msg-send-btn" name="msg-send-btn" onclick=""><i
+                        class='bx bx-send'></i></button>
+
+            </div>
+
+        </div>
+    </section>
+    <script src="./js/home.js"></script>
+    <script src="/node_modules/socket.io/client-dist/socket.io.min.js"></script>
+    <script>
+        // console.log(screen.width);
+        //define selected user
+        let selected_user = null;
+
+        const token = JSON.parse(sessionStorage.getItem('auth-token'));
+        // an async function for fetching all available users
+        async function userFetching(reqUrl, authToken) {
+            let response = await fetch(`${reqUrl}/fetch/fetchusers`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": authToken
+                }
+            })
+            let jsonresp = await response.json()
+            return jsonresp;
+        }
+        //calling userFetching function
+        userFetching(url, token)
+            .then((data) => {
+                //Here we are using .then() because userFetching() will return a promise
+                //So we have to do our all work in then() function
+                let userList = data.result
+                let otherPersonsBox = document.getElementById("otherPersonsBox")
+                userList.forEach(item => {
+                    let html = `<div class='other_user' data-uid = '${item.id}' onclick='selectUser(${item.id})'> 
+                                    <h4>${item.username}</h4>
+                                    <p>${item.email}</p>
+                                    <div class=""></div>
+                                </div>`;
+                    //otherPersonsBox.innerHTML += html
+                    if (userInfo.id != item.id) {
+                        otherPersonsBox.innerHTML += html
+                    }
+                });
+            })
+
+        //Function for fetching selected user's info
+        async function fetchSingleUser(id, authToken) {
+            let response = await fetch(`${url}/fetch/singleuser?uid=${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": authToken
+                }
+            })
+
+            let jsonresp = await response.json();
+            return jsonresp;
+        }
+
+        //Function for fetching messages
+        async function fetchMessage(sender, receiver, authToken) {
+            let response = await fetch(`${url}/fetch/getmessages?sender=${sender}&receiver=${receiver}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": authToken
+                }
+            })
+
+            let jsonresp = await response.json();
+            return jsonresp;
+        }
+
+        //Function for fetching unread messages
+        async function fetchUnreadMsg(uid, authToken) {
+            let response = await fetch(`${url}/fetch/getunreadmsg?uid=${uid}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": authToken
+                }
+            })
+
+            let jsonresp = await response.json();
+            return jsonresp;
+        }
+
+        //Function for set unread messages to read
+        async function setMsgRead(uid, senderID, authToken) {
+            let bodyJson = JSON.stringify({ uid, sender: senderID })
+            let response = await fetch(`${url}/fetch/setreadmsg/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": authToken
+                },
+                body: bodyJson
+            })
+
+            let jsonresp = await response.json();
+            return jsonresp;
+        }
+
+        //Functoin from create Message Block
+        function createMsgBlock(msg_content, msg_time, msg_type) {
+            let msgDiv = document.createElement("pre");
+            msgDiv.setAttribute("class", `${msg_type}-msg`);
+            msgDiv.innerHTML = msg_content + "</br>";
+            let msgDate = document.createElement("P");
+            msgDate.setAttribute("class", "msg_date");
+            msgDate.innerHTML = msg_time;
+            msgDiv.appendChild(msgDate);
+            chatBox.appendChild(msgDiv);
+        }
+
+        // Function for select user
+        function selectUser(id) {
+            let chatInfoBar = document.getElementById("chat-info-bar");
+            let msgInputBox = document.getElementById("msg-input");
+            msgInputBox.placeholder = "Type your message..."; //Change textarea place holder
+            msgInputBox.removeAttribute('readonly'); //remove readonly attribute from textarea to enable writing ability
+            const msgSendBtn = document.getElementById("msg-send-btn");
+            const receiverS_name = document.getElementById("receiverS_name");
+            selected_user = id;
+
+            let other_users = document.getElementsByClassName("other_user") //other users
+
+            //Call fetchSingleUser function for fetch selected user
+            fetchSingleUser(id, token)
+                .then((respdata) => {
+                    let user = respdata.result[0];
+                    receiverS_name.innerHTML = user.username;
+                })
+
+            if (screen.width < 768) {
+                chatBox.style.display = "block";
+                otherPersonsBox.style.display = "none";
+            }
+
+            let child = chatBox.lastElementChild
+            // console.log(child);
+            while (child) {
+                chatBox.removeChild(child);
+                child = chatBox.lastElementChild
+            }
+            if (child === null) {
+                fetchMessage(userInfo.id, id, token)
+                    .then((respdata) => {
+                        // console.log(respdata.result);
+                        if (respdata.result) {
+                            respdata.result.forEach((data) => {
+                                // console.log(data)
+                                let msgDateObj = new Date(data.msg_time);
+                                // console.log(msgDateObj);
+                                let timeString = `${msgDateObj.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}\t ${msgDateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                                    }`;
+                                // console.log(timeString);
+                                if (data.receiver_id === id) {
+                                    createMsgBlock(data.message, timeString, 'outgoing')
+                                } else {
+                                    createMsgBlock(data.message, timeString, 'incoming')
+                                }
+                            })
+                            chatBox.scrollTo(0, chatBox.scrollHeight);
+                        }
+                        else {
+                            let no_msg_div = document.createElement("DIV");
+                            no_msg_div.setAttribute("id", "no_msg");
+                            no_msg_div.innerHTML = "There is no messages";
+                            chatBox.appendChild(no_msg_div)
+                        }
+
+                    })
+            }
+
+            if (selected_user === null) {
+                msgSendBtn.disabled = true //disable send message button
+            }
+            msgSendBtn.setAttribute("onclick", `sendmsg(${id})`);
+            // console.log("Selected user: " + id);
+
+            //Set message to read and make changes in elements
+            setMsgRead(userInfo.id, id, token)
+                .then(() => {
+                    for (let item = 0; item < all_other_users.length; item++) {
+                        let userNode = all_other_users[item];
+                        if (userNode.dataset.uid == id) {
+                            let badge_child = userNode.children[2];
+                            // console.log(badge_child.className);
+                            badge_child.setAttribute("Class", "");
+                        }
+                    }
+                })
+
+        }
+
+        /* ============= Socket Section =============================================================== */
+
+        const all_other_users = document.getElementsByClassName("other_user")
+        // console.log(all_other_users);
+
+        fetchUnreadMsg(userInfo.id, token)
+            .then((data) => {
+                // console.log(data);
+                let sender_arr = data.result;
+                // console.log(sender_arr);
+                for (let item = 0; item < all_other_users.length; item++) {
+                    let userNode = all_other_users[item];
+                    // change foreach to for loop
+                    sender_arr.forEach(item => {
+                        if (userNode.dataset.uid == item.sender_id) {
+                            let badge_child = userNode.children[2];
+                            // console.log(badge_child.className);
+                            badge_child.setAttribute("Class", "");
+                            badge_child.setAttribute("Class", "unread_badge");
+                        }
+                    });
+                }
+            })
+
+        //functions for socket
+        const socket = io();
+        if (userInfo) {
+            socket.emit('loggedin', userInfo);
+        }
+        // allUsers[i].children[0].style.color = "#009600";
+
+        socket.on('userListUpdate', (users) => {
+            // const all_other_users = document.getElementsByClassName("other_user")
+            users.forEach((user) => {
+                for (let i = 0; i < all_other_users.length; i++) {
+                    let other_userID = all_other_users[i].dataset.uid
+                    if (user.id == other_userID) {
+                        // console.log(user.id + " = " + other_userID + " Matched & color green");
+                        all_other_users[i].children[0].style.color = "#009600";
+                    } else {
+                        continue;
+                    }
+                }
+            })
+        })
+
+        //function for sending msg
+        function sendmsg(id) {
+            let msg = document.getElementById("msg-input");
+            // console.log(msg + " => from id: " + userInfo.id + " to: " + id);
+            let msgData = { msg: msg.value, from: userInfo.id, to: id }
+            // console.log(msgData);
+            let msgDiv = document.createElement("PRE");
+            msgDiv.setAttribute("class", "outgoing-msg");
+            msgDiv.innerHTML = msg.value;
+            socket.emit('message', msgData) //Send message event to the server
+            chatBox.appendChild(msgDiv) //Append msgDiv Child to chatbox
+            msg.value = "";
+            let no_msgElm = document.getElementById("no_msg");
+            if (no_msgElm) {
+                no_msgElm.remove();
+            }
+        }
+        socket.on('message', (msg) => {
+            // console.log(msg);
+            // console.log(selected_user);
+            if (selected_user === msg.from) {
+                // console.log("Id matched")
+                let msgDiv = document.createElement("PRE");
+                msgDiv.setAttribute("class", "incoming-msg");
+                msgDiv.innerHTML = msg.msg;
+                chatBox.appendChild(msgDiv)
+                chatBox.scrollTo(0, chatBox.scrollHeight);
+            }
+            /*else {
+                fetchUnreadMsg(userInfo.id, token)
+                    .then((data) => {
+                        // console.log(data);
+                        let sender_arr = data.result;
+                        console.log(sender_arr);
+                        for (let item = 0; item < all_other_users.length; item++) {
+                            let userNode = all_other_users[item];
+                            sender_arr.forEach(item => {
+                                if (userNode.dataset.uid == item.sender_id) {
+                                    let badge_child = userNode.children[2];
+                                    // console.log(badge_child.className);
+                                    badge_child.setAttribute("Class", "");
+                                    badge_child.setAttribute("Class", "unread_badge");
+                                }
+                            });
+                        }
+                    })
+            }*/
+
+            let no_msgElm = document.getElementById("no_msg")
+            if (no_msgElm) {
+                no_msgElm.remove();
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>

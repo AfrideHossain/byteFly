@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <title>ByteFly || Authentication</title>
+</head>
+
+<body>
+    <div id="alert_box" class="alertbox">
+        <h4 class="alert_heading">ByteFly</h4>
+        <p id="alert_msg">Something went wrong</p>
+    </div>
+
+    <div class="main_box">
+
+        <h3 id="heading">Log In</h3>
+        <!-- Log in part -->
+
+        <form class="form_body" id="login" method="post">
+            <input type="text" name="l_username" id="l_username" class="form_input" placeholder="Username"
+                autocomplete="on">
+            <input type="password" name="l_password" id="l_password" placeholder="Password" class="form_input"
+                autocomplete="on">
+
+            <button class="submit_btn" type="submit" name="login" id="login_btn">Log In</button>
+
+            <p class="form_footer">Don't have an account? <span id="signup_link">Create new account</span></p>
+        </form>
+
+        <!-- Log in part -->
+
+        <!-- Sign up part -->
+
+        <form class="form_body" id="sign_up" method="post">
+            <input type="text" name="username" id="username" class="form_input" placeholder="Username"
+                autocomplete="on">
+            <input type="email" name="email" id="email" class="form_input" placeholder="Email">
+            <input type="password" name="password" id="password" placeholder="Password" class="form_input"
+                autocomplete="on">
+
+            <button class="submit_btn" type="submit" name="signup" id="signup_btn">Sign Up</button>
+
+            <p class="form_footer">Already have an account? <span id="login_link">Log In</span></p>
+        </form>
+
+        <!-- Sign up part -->
+    </div>
+
+    <script src="./func.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "poppins";
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('../style/icons/highway.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    max-width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    overflow: hidden;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+}
+
+.t2b_anim {
+    animation: t2b 1s;
+}
+
+@keyframes t2b {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 10px;
+        opacity: 1;
+    }
+}
+
+.alertbox {
+    position: absolute;
+    top: 10px;
+    width: 250px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, .3);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    color: rgb(255, 255, 255);
+    padding: 5px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.alert_heading {
+    color: #eee;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 5px;
+    font-size: 1.2em;
+    font-weight: 600;
+    border-bottom: 1px solid rgb(255, 255, 255);
+}
+
+#alert_msg {
+    font-size: .9em;
+    font-weight: 500;
+    color: #eee;
+    width: 100%;
+    height: 50%;
+    padding: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+
+#heading {
+    color: #eee;
+    font-size: 1.5em;
+    margin: 5px;
+    font-weight: 500;
+}
+
+.main_box {
+    height: auto;
+    width: 400px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, .3);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.form_body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 5px;
+    animation: fade_in 2s;
+    transition: height 2s;
+}
+
+.form_input {
+    background-color: rgb(231, 231, 231);
+    width: 100%;
+    height: 30px;
+    border: none;
+    outline: none;
+    margin: 3px 0;
+    padding: 0 5px;
+    border-radius: 3px;
+    color: #000;
+    font-size: 15px;
+}
+
+.submit_btn {
+    background-color: rgb(0, 153, 255);
+    width: 100%;
+    height: 35px;
+    border: none;
+    outline: none;
+    margin-top: 10px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.submit_btn:hover {
+    background-color: rgb(0, 174, 255);
+}
+
+.form_footer {
+    margin-top: 10px;
+    text-align: left;
+    width: 100%;
+    font-size: 12px;
+    color: #fff;
+}
+
+.form_footer span {
+    color: rgb(0, 162, 255);
+    cursor: pointer;
+}
+
+#sign_up {
+    display: none;
+}
+
+@keyframes fade_in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
