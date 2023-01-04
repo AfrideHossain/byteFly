@@ -7,10 +7,10 @@ const mysql = require('mysql');
 //     database: "bytefly"
 // }
 config = {
-    host: "sql.freedb.tech",
-    user: "freedb_bytefly",
-    password: "Vq22z@fgz$8@tGR",
-    database: "freedb_bytefly"
+    host: "fdb29.awardspace.net",
+    user: "4237775_bytefly",
+    password: "T2)Ey6.-7AF5JVW!",
+    database: "4237775_bytefly"
 }
 
 let connection = mysql.createConnection(config);
